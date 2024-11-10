@@ -1,0 +1,77 @@
+syntax = "proto3";
+package payments;
+
+import "google/protobuf/timestamp.proto";
+
+
+
+service Greet {
+    // simple RPC
+    rpc SayHello(NoParam) returns (HelloResponse);
+
+}
+
+message NoParam {
+	string message = 1;
+};
+
+message HelloResponse {
+    string message = 1;
+}
+
+message NamesList {
+    repeated string names = 1;
+}
+
+message AppBlock {
+    string id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    string hash = 3;
+    string prev_hash = 4;
+    uint64 nonce = 5;
+    repeated AppPayload payload = 6;
+}
+
+message AppPayload {
+    int64 user_id = 1;
+    AppDataEvent data = 2;
+}
+
+message AppDataEvent {
+    AppCreateEvent create = 1;
+    AppChangeEvent change = 2;
+}
+
+message AppCreateEvent {
+    string event_type = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    AppCreateDataPayload data = 3;
+}
+
+message AppChangeEvent {
+    AppEventType event_type = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    AppChangeDataPayload old_data = 3;
+    AppChangeDataPayload new_data = 4;
+}
+
+message AppCreateDataPayload {
+    string hash = 1;
+    string app_name = 2;
+    string email = 3;
+    string password = 4;
+    string notes = 5;
+}
+
+message AppChangeDataPayload {
+    string data_hash = 1;
+    string data = 2;
+}
+
+enum AppEventType {
+    APP_NAME_CHANGE = 0;
+    USERNAME_CHANGE = 1;
+    EMAIL_CHANGE = 2;
+    PASSWORD_CHANGE = 3;
+    NOTES_CHANGE = 4;
+}
